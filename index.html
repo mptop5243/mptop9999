@@ -290,7 +290,14 @@
         }
 
         if (studentName && wordViewer.innerHTML) {
-          highlightNameInWord(studentName);
+          const wordContent = wordViewer.innerHTML;
+          if (wordContent.includes(studentName)) {
+            highlightNameInWord(studentName);
+          } else {
+            status.textContent = `(學生本日無生教)`;
+            status.className = "not-found";
+            errorSound.play();
+          }
         }
 
         // 根據當前查詢類型刷新記錄
