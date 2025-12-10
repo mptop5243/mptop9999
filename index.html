@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>RFID 刷卡上傳與查詢</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.0/mammoth.browser.min.js"></script>
@@ -136,7 +137,7 @@
   <h2>📄 上傳生教名冊Word檔</h2>
   <input type="file" id="wordUpload" accept=".docx,.doc" />
   <button onclick="loadWord()">載入Word檔</button>
-  
+    
   <div id="wordContainer" style="display: none;">
     <div class="word-controls">
       <button onclick="downloadMarkedRoster()">下載已標記名冊</button>
@@ -163,6 +164,7 @@
   </div>
   
   <button onclick="window.print()">列印</button>
+  <button onclick="downloadExcel()">下載Excel</button>
 
   <table id="recordsTable">
     <thead>
@@ -537,6 +539,17 @@
     window.onload = function() {
       queryRecordsByDate();
     };
+function downloadExcel() {
+  const table = document.getElementById("recordsTable");
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.table_to_sheet(table);
+
+  XLSX.utils.book_append_sheet(wb, ws, "刷卡紀錄");
+
+  const filename = "刷卡紀錄_" + new Date().toISOString().slice(0,10) + ".xlsx";
+  XLSX.writeFile(wb, filename);
+}
+
   </script>
 </body>
 </html>
